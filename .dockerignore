@@ -1,0 +1,14 @@
+.husky
+.vscode
+.git
+/dist
+/documentation
+/logs
+/node_modules
+/public
+*.md
+.example.env
+commitlint.config.js
+.eslintrc.js
+.prettierignore
+.prettierrc

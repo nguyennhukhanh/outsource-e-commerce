@@ -1,0 +1,68 @@
+version: '3'
+services:
+  backend:
+    user: root
+    container_name: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - static:/app/public
+    ports:
+      - ${PORT}:${PORT}
+    depends_on:
+      - redis
+      - mysql_db
+    networks:
+      - app-network
+    environment:
+      - REDIS_HOST=e-commerce-redis
+
+  redis:
+    image: redis:latest
+    hostname: e-commerce-redis
+    container_name: e-commerce-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD} --protected-mode no --bind 0.0.0.0
+    environment:
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_NAME=${REDIS_NAME}
+    ports:
+      - '6381:${REDIS_PORT}'
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - app-network
+
+  mysql_db:
+    image: mysql:8.0.25
+    container_name: mysql_8_0_25
+    restart: unless-stopped
+    command:
+      - --sort_buffer_size=1073741824
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_DATABASE}
+    ports:
+      - 3308:${DB_PORT}
+    volumes:
+      - db-backup:/var/lib/mysql
+    networks:
+      - app-network
+
+volumes:
+  db-backup:
+  static:
+  redis-data:
+
+networks:
+  app-network:
+    driver: bridge
