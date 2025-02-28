@@ -14,7 +14,7 @@ WORKDIR /app
 
 COPY --from=builder /app/.gitignore /app/.gitignore
 COPY --from=builder /app/package.json /app/package.json
-COPY --from=builder /app/bun.lockb /app/bun.lockb
+COPY --from=builder /app/bun.lock /app/bun.lock
 
 RUN bun install
 
