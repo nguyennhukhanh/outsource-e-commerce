@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AdminSession } from 'src/database/entities';
+import { AdminSession, UserSession } from 'src/database/entities';
 
 import { SessionService } from './session.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AdminSession])],
+  imports: [TypeOrmModule.forFeature([AdminSession, UserSession])],
   providers: [SessionService],
   exports: [SessionService],
 })

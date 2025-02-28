@@ -17,8 +17,16 @@ export const setupSwagger = (app: INestApplication): void => {
     .addBearerAuth()
     .build();
 
-  const document = SwaggerModule.createDocument(app, options);
-  SwaggerModule.setup('api/docs', app, document);
+  const document = SwaggerModule.createDocument(app, options, {
+    operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
+    deepScanRoutes: true,
+  });
+
+  SwaggerModule.setup('api/docs', app, document, {
+    swaggerOptions: {
+      persistAuthorization: true,
+    },
+  });
 };
 
 const rateLimiter = new RateLimiterMemory({

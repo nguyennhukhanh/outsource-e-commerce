@@ -4,7 +4,9 @@ import * as path from 'path';
 import * as util from 'util';
 import * as winston from 'winston';
 
-const logIcons = {
+type LogLevel = 'error' | 'warn' | 'info' | 'debug' | 'verbose';
+
+const logIcons: Record<LogLevel, string> = {
   error: '❌',
   warn: '⚠️',
   info: '🟢',
@@ -34,7 +36,7 @@ export function getLogger(name: string) {
         winston.format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         winston.format.printf((info) => {
           const { timestamp, level, message, stack, ...extra } = info;
-          const icon = logIcons[info[Symbol.for('level')]] || '';
+          const icon = logIcons[info[Symbol.for('level')] as LogLevel] || '';
           const extraDetails = Object.keys(extra).length
             ? util.inspect(extra)
             : '';

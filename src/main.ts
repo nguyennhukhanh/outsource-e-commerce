@@ -8,29 +8,46 @@ import type { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
+import { watchEnvFile } from './utils/env-watcher.util';
 import {
   rateLimit,
   setupSwagger,
   validateEnvironmentVariables,
 } from './utils/init';
+import { CustomLogger } from './utils/logger.service';
 
 // Set the timezone to UTC
 process.env.TZ = 'Etc/Universal';
 
+const logger = new Logger('E-Commerce');
+
+let app: NestExpressApplication;
+
+async function shutdown() {
+  if (app) {
+    await app.close();
+    logger.log('Application gracefully closed');
+  }
+  process.exit(0);
+}
+
 async function bootstrap() {
   validateEnvironmentVariables();
 
-  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+  app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
+    logger: new CustomLogger(),
   });
 
-  const logger = new Logger('E-Commerce');
   const configService = app.get(ConfigService);
 
   app.set('trust proxy', true);
   app.setGlobalPrefix(configService.get('main.apiPrefix'));
 
-  setupSwagger(app);
+  // Move Swagger setup here, after setGlobalPrefix
+  if (!configService.get('main.isProduction')) {
+    setupSwagger(app);
+  }
 
   app.use(helmet());
   app.use(
@@ -68,6 +85,13 @@ async function bootstrap() {
   const port = configService.get('main.port') ?? 1410;
   await app.listen(port);
   logger.log(`App is running on port ${port}!`);
+
+  // Watch for .env file changes
+  watchEnvFile(app);
 }
+
+// Handle graceful shutdown
+process.on('SIGTERM', shutdown);
+process.on('SIGINT', shutdown);
 
 bootstrap();
