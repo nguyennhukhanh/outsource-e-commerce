@@ -16,7 +16,8 @@ import type { CreateCategoryDto } from './dto/create-category.dto';
 
 @Injectable()
 export class CategoryService
-  implements IService<any, any, CreateCategoryDto, Category>
+  implements
+    IService<CategoryQuery, QueryPaginationDto, CreateCategoryDto, Category>
 {
   constructor(
     @InjectRepository(Category)

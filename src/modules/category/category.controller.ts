@@ -10,7 +10,7 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { GetUser } from 'src/common/decorators/user.decorator';
 import { Admin } from 'src/database/entities';
 import { QueryPaginationDto } from 'src/shared/dto/pagination.query';
@@ -20,11 +20,12 @@ import { CategoryService } from './category.service';
 import { CategoryQuery } from './dto/category.query';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
-@ApiTags('Category')
+@ApiTags('category')
 @Controller('category')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  @ApiOperation({ summary: 'Get categories' })
   @Get()
   getCategories(
     @Query() query?: CategoryQuery,
@@ -33,17 +34,22 @@ export class CategoryController {
     return this.categoryService.getItems(query, pagination);
   }
 
+  @ApiOperation({ summary: 'Get category' })
   @Get(':id')
   getCategory(@Param('id', ParseIntPipe) id: number) {
     return this.categoryService.getItem(id);
   }
 
+  @ApiOperation({ summary: 'Create category' })
+  @ApiBearerAuth()
   @Post()
   @UseGuards(AdminJwtGuard)
   createCategory(@GetUser() admin: Admin, @Body() dto: CreateCategoryDto) {
     return this.categoryService.createItemByRole(admin, dto);
   }
 
+  @ApiOperation({ summary: 'Update category' })
+  @ApiBearerAuth()
   @Put(':id')
   @UseGuards(AdminJwtGuard)
   updateCategory(
@@ -54,6 +60,8 @@ export class CategoryController {
     return this.categoryService.updateItemByRole(admin, id, dto);
   }
 
+  @ApiOperation({ summary: 'Delete category' })
+  @ApiBearerAuth()
   @Delete(':id')
   @UseGuards(AdminJwtGuard)
   deleteCategory(
