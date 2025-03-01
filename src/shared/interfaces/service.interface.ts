@@ -72,7 +72,7 @@ export interface IService<T, P, C, E> {
   createItemByRole?(
     role: User | Admin,
     dto: C,
-    file?: Express.Multer.File,
+    file?: Express.Multer.File | Express.Multer.File[],
   ): Promise<E>;
 
   /**
@@ -97,8 +97,8 @@ export interface IService<T, P, C, E> {
   updateItemByRole?(
     role: User | Admin,
     id: number,
-    dto: E,
-    file?: Express.Multer.File,
+    dto?: E,
+    file?: Express.Multer.File | Express.Multer.File[],
   ): Promise<boolean>;
 
   /**

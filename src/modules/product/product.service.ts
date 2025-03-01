@@ -1,5 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as fs from 'fs';
+import * as path from 'path';
 import type { Admin } from 'src/database/entities';
 import { Product, ProductCategory } from 'src/database/entities';
 import type { QueryPaginationDto } from 'src/shared/dto/pagination.query';
@@ -22,6 +24,24 @@ export class ProductService
     @InjectRepository(ProductCategory)
     private readonly productCategoryRepository: Repository<ProductCategory>,
   ) {}
+
+  private async saveImages(files: Express.Multer.File[]): Promise<string[]> {
+    const uploadDir = 'public/products';
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const savedFiles: string[] = [];
+    for (const file of files) {
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+      const filename = `${uniqueSuffix}-${file.originalname}`;
+      const filePath = path.join(uploadDir, filename);
+
+      await fs.promises.writeFile(filePath, file.buffer);
+      savedFiles.push(`/${uploadDir}/${filename}`);
+    }
+    return savedFiles;
+  }
 
   async getItems(
     query?: ProductQuery,
@@ -83,11 +103,21 @@ export class ProductService
     return product;
   }
 
-  async createItemByRole(role: Admin, dto: CreateProductDto): Promise<Product> {
+  async createItemByRole(
+    role: Admin,
+    dto: CreateProductDto,
+    files?: Express.Multer.File[],
+  ): Promise<Product> {
+    const { categoryIds, ...productData } = dto;
     const product = this.productRepository.create({
-      ...dto,
+      ...productData,
       provider: role,
+      images: [],
     });
+
+    if (files?.length) {
+      product.images = await this.saveImages(files);
+    }
 
     await this.productRepository.save(product);
 
@@ -107,7 +137,8 @@ export class ProductService
   async updateItemByRole(
     role: Admin,
     id: number,
-    dto: Partial<Product>,
+    dto?: Partial<Product>,
+    files?: Express.Multer.File[],
   ): Promise<boolean> {
     const product = await this.getItem(id);
 
@@ -118,6 +149,22 @@ export class ProductService
     }
 
     Object.assign(product, dto);
+
+    if (files?.length) {
+      // Delete old images if they exist
+      if (product.images?.length) {
+        for (const oldImage of product.images) {
+          const filePath = path.join(process.cwd(), oldImage);
+          if (fs.existsSync(filePath)) {
+            await fs.promises.unlink(filePath);
+          }
+        }
+      }
+
+      // Save new images
+      product.images = await this.saveImages(files);
+    }
+
     await this.productRepository.save(product);
     return true;
   }

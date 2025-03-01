@@ -35,4 +35,12 @@ export class CreateProductDto {
   @ApiProperty({ required: false })
   @IsOptional()
   categoryIds?: number[];
+
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    required: false,
+  })
+  @IsOptional()
+  images?: Express.Multer.File[];
 }

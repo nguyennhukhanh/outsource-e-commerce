@@ -8,9 +8,17 @@ import {
   Post,
   Put,
   Query,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import {
+  ApiBearerAuth,
+  ApiConsumes,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetUser } from 'src/common/decorators/user.decorator';
 import { Admin } from 'src/database/entities';
 import { QueryPaginationDto } from 'src/shared/dto/pagination.query';
@@ -41,23 +49,32 @@ export class ProductController {
   }
 
   @ApiOperation({ summary: 'Create product' })
+  @ApiConsumes('multipart/form-data')
   @ApiBearerAuth()
   @Post()
   @UseGuards(AdminJwtGuard)
-  createProduct(@GetUser() admin: Admin, @Body() dto: CreateProductDto) {
-    return this.productService.createItemByRole(admin, dto);
+  @UseInterceptors(FilesInterceptor('images', 10)) // Allow up to 10 images
+  createProduct(
+    @GetUser() admin: Admin,
+    @Body() dto: CreateProductDto,
+    @UploadedFiles() files: Express.Multer.File[],
+  ) {
+    return this.productService.createItemByRole(admin, dto, files);
   }
 
   @ApiOperation({ summary: 'Update product' })
+  @ApiConsumes('multipart/form-data')
   @ApiBearerAuth()
   @Put(':id')
   @UseGuards(AdminJwtGuard)
+  @UseInterceptors(FilesInterceptor('images', 10))
   updateProduct(
     @GetUser() admin: Admin,
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: CreateProductDto,
+    @Body() dto?: CreateProductDto,
+    @UploadedFiles() files?: Express.Multer.File[],
   ) {
-    return this.productService.updateItemByRole(admin, id, dto);
+    return this.productService.updateItemByRole(admin, id, dto, files);
   }
 
   @ApiOperation({ summary: 'Delete product' })
