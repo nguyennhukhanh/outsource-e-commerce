@@ -1,6 +1,5 @@
 import type { Pagination } from 'src/common/classes/pagination';
 import type { QueryPaginationDto } from 'src/shared/dto/pagination.query';
-import type { ISeo } from 'src/shared/interfaces/seo.interface';
 import type { SelectQueryBuilder } from 'typeorm';
 
 export enum FetchType {
@@ -11,7 +10,6 @@ export enum FetchType {
 export class FetchResult<T> {
   items: Array<Partial<T>>;
   meta: Pagination;
-  seo?: ISeo;
 }
 
 /**
@@ -30,7 +28,7 @@ export async function paginateEntities<T>(
 ): Promise<FetchResult<T>> {
   const { page, limit } = pagination;
 
-  const take = limit > 200 || !limit ? 200 : limit;
+  const take = limit > 50 || !limit ? 50 : limit;
   const skip = (page - 1) * take || 0;
 
   const totalItems = await queryBuilder.getCount();

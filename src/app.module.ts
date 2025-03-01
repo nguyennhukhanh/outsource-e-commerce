@@ -9,6 +9,7 @@ import { TransformInterceptor } from './common/interceptors/transform.intercepto
 import { load } from './configs';
 import { AuthModule } from './modules/auth/auth.module';
 import { RoleGuard } from './modules/auth/guards/role.guard';
+import { CategoryModule } from './modules/category/category.module';
 import { DebugModule } from './modules/debug/debug.module';
 import { HealthController } from './modules/default/health.controller';
 import { SessionModule } from './modules/session/session.module';
@@ -28,6 +29,7 @@ import { OrmModule } from './orm.module';
     AuthModule,
     SessionModule,
     DebugModule,
+    CategoryModule,
   ],
   controllers: [HealthController],
   providers: [

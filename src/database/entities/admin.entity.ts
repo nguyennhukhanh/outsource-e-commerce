@@ -1,6 +1,7 @@
 import { RoleEnum, SocialAuthEnum } from 'src/shared/enums';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
+import { Category, Product } from '.';
 import { BaseTime } from './base/time.entity';
 
 @Entity()
@@ -35,4 +36,10 @@ export class Admin extends BaseTime {
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
+
+  @OneToMany(() => Category, (category) => category.creator)
+  categories: Category[];
+
+  @OneToMany(() => Product, (product) => product.provider)
+  products: Product[];
 }

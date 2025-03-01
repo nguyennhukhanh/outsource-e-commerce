@@ -1,7 +1,9 @@
 import { SocialAuthEnum } from 'src/shared/enums';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { BaseTime } from './base/time.entity';
+import { Cart } from './cart.entity';
+import { Checkout } from './checkout.entity';
 
 @Entity()
 export class User extends BaseTime {
@@ -27,4 +29,10 @@ export class User extends BaseTime {
 
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
+
+  @OneToMany(() => Cart, (cart) => cart.user)
+  carts: Cart[];
+
+  @OneToMany(() => Checkout, (checkout) => checkout.user)
+  checkouts: Checkout[];
 }
