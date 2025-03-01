@@ -4,6 +4,8 @@ import { load } from 'src/configs';
 import { OrmModule } from 'src/orm.module';
 
 import { AdminSeedModule } from './admin/admin_seed.module';
+import { CategorySeedModule } from './category/category_seed.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -13,6 +15,7 @@ import { AdminSeedModule } from './admin/admin_seed.module';
     }),
     OrmModule,
     AdminSeedModule,
+    CategorySeedModule,
   ],
 })
 export class SeedModule {}

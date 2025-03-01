@@ -33,8 +33,16 @@ export class AdminSeedService {
     const admins = [
       {
         id: 1,
-        email: 'francies.nguyen@gmail.com',
+        email: 'kwalker.nnk@gmail.com',
         fullName: 'Francies Nguyen',
+        socialType: SocialAuthEnum.GOOGLE,
+        role: RoleEnum.SUPER_ADMIN,
+        isActive: true,
+      },
+      {
+        id: 2,
+        email: 'hoigamedev932@gmail.com',
+        fullName: 'Hoi Dev',
         socialType: SocialAuthEnum.GOOGLE,
         role: RoleEnum.SUPER_ADMIN,
         isActive: true,
