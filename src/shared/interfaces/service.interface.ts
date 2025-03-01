@@ -97,7 +97,7 @@ export interface IService<T, P, C, E> {
   updateItemByRole?(
     role: User | Admin,
     id: number,
-    dto?: E,
+    dto?: C, // Changed from E to C to match the DTO type
     file?: Express.Multer.File | Express.Multer.File[],
   ): Promise<boolean>;
 

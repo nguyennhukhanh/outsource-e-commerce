@@ -137,18 +137,27 @@ export class ProductService
   async updateItemByRole(
     role: Admin,
     id: number,
-    dto?: Partial<Product>,
+    dto?: CreateProductDto, // Changed from Partial<Product> to CreateProductDto
     files?: Express.Multer.File[],
   ): Promise<boolean> {
     const product = await this.getItem(id);
+    const { categoryIds, ...updateData } = dto; // Extract categoryIds
 
-    if (dto.productCategories) {
+    if (categoryIds?.length) {
+      // Delete existing categories
       await this.productCategoryRepository.delete({ product: { id } });
-      await this.productCategoryRepository.save(dto.productCategories);
-      delete dto.productCategories;
+
+      // Create new category relationships
+      const productCategories = categoryIds.map((categoryId) =>
+        this.productCategoryRepository.create({
+          product,
+          category: { id: categoryId },
+        }),
+      );
+      await this.productCategoryRepository.save(productCategories);
     }
 
-    Object.assign(product, dto);
+    Object.assign(product, updateData);
 
     if (files?.length) {
       // Delete old images if they exist
