@@ -8,6 +8,7 @@ import {
   CheckoutItem,
   Product,
   ProductCategory,
+  ProductComment,
   User,
   UserSession,
 } from './entities';
@@ -24,6 +25,7 @@ const entities = [
   CheckoutItem,
   Product,
   ProductCategory,
+  ProductComment,
 ];
 
 export default entities;

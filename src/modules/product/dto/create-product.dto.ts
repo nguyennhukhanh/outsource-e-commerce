@@ -24,14 +24,14 @@ export class CreateProductDto {
 
   @ApiProperty({ required: true })
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
   @Min(0)
   price: number;
 
   @ApiProperty({ required: true })
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
   @Min(0)
   stock: number;

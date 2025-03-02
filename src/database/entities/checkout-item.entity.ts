@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-import { Checkout } from '.';
+import { Checkout, Product } from '.';
 import { BaseTime } from './base/time.entity';
 
 @Entity()
@@ -14,8 +14,8 @@ export class CheckoutItem extends BaseTime {
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   price: number;
 
-  @Column({ length: 255 })
-  productName: string;
+  @ManyToOne(() => Product)
+  product: Product;
 
   @ManyToOne(() => Checkout, (checkout) => checkout.checkoutItems)
   checkout: Checkout;

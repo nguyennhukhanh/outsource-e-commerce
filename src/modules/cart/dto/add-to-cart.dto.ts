@@ -5,13 +5,13 @@ import { IsNotEmpty, IsNumber, Min } from 'class-validator';
 export class AddToCartDto {
   @ApiProperty()
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
   productId: number;
 
   @ApiProperty()
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   @IsNotEmpty()
   @Min(1)
   quantity: number;

@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { Admin, CartItem, ProductCategory } from '.';
+import { Admin, CartItem, ProductCategory, ProductComment } from '.';
 import { BaseTime } from './base/time.entity';
 
 @Entity()
@@ -43,4 +43,7 @@ export class Product extends BaseTime {
     (productCategory) => productCategory.product,
   )
   productCategories: ProductCategory[];
+
+  @OneToMany(() => ProductComment, (comment) => comment.product)
+  comments: ProductComment[];
 }

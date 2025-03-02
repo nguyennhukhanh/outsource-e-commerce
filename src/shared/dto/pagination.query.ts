@@ -10,7 +10,7 @@ export class QueryPaginationDto {
   })
   @IsOptional()
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   limit?: number = 50;
 
   @ApiProperty({
@@ -20,6 +20,6 @@ export class QueryPaginationDto {
   })
   @IsOptional()
   @IsNumber()
-  @Transform(({ value }) => Number(value))
+  @Transform(({ value }) => parseInt(value, 10))
   page?: number;
 }

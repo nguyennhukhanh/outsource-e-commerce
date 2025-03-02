@@ -7,5 +7,6 @@ export * from './checkout.entity';
 export * from './checkout-item.entity';
 export * from './product.entity';
 export * from './product-category.entity';
+export * from './product-comment.entity';
 export * from './user.entity';
 export * from './user_session.entity';

@@ -4,6 +4,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { BaseTime } from './base/time.entity';
 import { Cart } from './cart.entity';
 import { Checkout } from './checkout.entity';
+import { ProductComment } from './product-comment.entity';
 
 @Entity()
 export class User extends BaseTime {
@@ -35,4 +36,7 @@ export class User extends BaseTime {
 
   @OneToMany(() => Checkout, (checkout) => checkout.user)
   checkouts: Checkout[];
+
+  @OneToMany(() => ProductComment, (comment) => comment.user)
+  productComments: ProductComment[];
 }
