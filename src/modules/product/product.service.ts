@@ -26,7 +26,7 @@ export class ProductService
   ) {}
 
   private async saveImages(files: Express.Multer.File[]): Promise<string[]> {
-    const uploadDir = 'public/products';
+    const uploadDir = 'products';
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }

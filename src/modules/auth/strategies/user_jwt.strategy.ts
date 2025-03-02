@@ -50,12 +50,9 @@ export class UserJwtStrategy extends PassportStrategy(Strategy, 'user-jwt') {
       if (!userExist)
         throw Causes.UNAUTHORIZED('Access Token', 'Invalid access token');
 
-      userExist.expiresAt = undefined;
-      userExist.id = undefined;
-
       await this.redisService.set(key, userExist, 1800); // expires in 30 minutes
     }
 
-    return userExist;
+    return userExist.user;
   }
 }

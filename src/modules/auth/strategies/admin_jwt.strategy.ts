@@ -47,9 +47,6 @@ export class AdminJwtStrategy extends PassportStrategy(Strategy, 'admin-jwt') {
     if (!adminSession)
       throw Causes.UNAUTHORIZED('Access Token', 'Invalid access token');
 
-    adminSession.expiresAt = undefined;
-    adminSession.id = undefined;
-
-    return adminSession;
+    return adminSession.admin;
   }
 }

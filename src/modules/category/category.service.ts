@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import type { Admin } from 'src/database/entities';
 import { Category } from 'src/database/entities';
@@ -69,6 +73,12 @@ export class CategoryService
     role: Admin,
     dto: CreateCategoryDto,
   ): Promise<Category> {
+    const categoryExist = await this.categoryRepository.findOne({
+      where: { name: dto.name },
+      select: ['id'],
+    });
+    if (categoryExist) throw new ConflictException('Category already exists');
+
     const category = this.categoryRepository.create({
       ...dto,
       creator: role,
@@ -82,6 +92,19 @@ export class CategoryService
     dto: Partial<Category>,
   ): Promise<boolean> {
     const category = await this.getItem(id);
+
+    // Check for name conflict if name is being updated
+    if (dto.name && dto.name !== category.name) {
+      const categoryWithSameName = await this.categoryRepository.findOne({
+        where: { name: dto.name },
+        select: ['id'],
+      });
+
+      if (categoryWithSameName && categoryWithSameName.id !== id) {
+        throw new ConflictException('Category name already exists');
+      }
+    }
+
     Object.assign(category, dto);
     await this.categoryRepository.save(category);
     return true;
