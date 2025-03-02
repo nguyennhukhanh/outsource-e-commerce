@@ -26,7 +26,8 @@ export class ProductService
   ) {}
 
   private async saveImages(files: Express.Multer.File[]): Promise<string[]> {
-    const uploadDir = 'products';
+    const uploadDir = 'public/products';
+    const productDir = 'products';
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }
@@ -38,7 +39,7 @@ export class ProductService
       const filePath = path.join(uploadDir, filename);
 
       await fs.promises.writeFile(filePath, file.buffer);
-      savedFiles.push(`/${uploadDir}/${filename}`);
+      savedFiles.push(`/${productDir}/${filename}`);
     }
     return savedFiles;
   }
@@ -163,7 +164,11 @@ export class ProductService
       // Delete old images if they exist
       if (product.images?.length) {
         for (const oldImage of product.images) {
-          const filePath = path.join(process.cwd(), oldImage);
+          const filePath = path.join(
+            process.cwd(),
+            'public',
+            oldImage.replace(/^\//, ''),
+          ); // Fix the path resolution here
           if (fs.existsSync(filePath)) {
             await fs.promises.unlink(filePath);
           }
