@@ -28,6 +28,9 @@ export class User extends BaseTime {
   })
   socialType: SocialAuthEnum;
 
+  @Column({ length: 255, nullable: true })
+  password: string;
+
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 

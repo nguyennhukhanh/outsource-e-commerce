@@ -49,32 +49,31 @@ async function bootstrap() {
     setupSwagger(app);
   }
 
-  app.use(helmet());
-  app.use(
-    cors({
-      origin: configService.get('main.whitelist').split(',') || '*',
-      credentials: true,
-      maxAge: 86400,
-      allowedHeaders: ['Content-Type', 'Authorization'],
-      exposedHeaders: ['Content-Disposition'],
-      optionsSuccessStatus: 200,
-      preflightContinue: true,
-      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
-    }),
-  );
-
   if (configService.get('main.isProduction')) {
     logger.log('Rate limit is enabled');
     app.use(rateLimit);
+    app.use(helmet());
+    app.use(
+      cors({
+        origin: configService.get('main.whitelist').split(',') || '*',
+        credentials: true,
+        maxAge: 86400,
+        allowedHeaders: ['Content-Type', 'Authorization'],
+        exposedHeaders: ['Content-Disposition'],
+        optionsSuccessStatus: 200,
+        preflightContinue: true,
+        methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      }),
+    );
+    app.use((req: Request, res: Response, next: NextFunction) => {
+      res.setHeader('Content-Security-Policy', "default-src 'self'");
+      res.setHeader('X-Frame-Options', 'DENY');
+      res.setHeader('X-XSS-Protection', '1; mode=block');
+      next();
+    });
   }
 
   app.use(compression());
-  app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('Content-Security-Policy', "default-src 'self'");
-    res.setHeader('X-Frame-Options', 'DENY');
-    res.setHeader('X-XSS-Protection', '1; mode=block');
-    next();
-  });
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,

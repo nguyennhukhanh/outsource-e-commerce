@@ -16,6 +16,7 @@ import { AdminJwtStrategy } from './strategies/admin_jwt.strategy';
 import { AdminJwtRefreshTokenStrategy } from './strategies/admin_jwt_refresh_token.strategy';
 import { UserJwtStrategy } from './strategies/user_jwt.strategy';
 import { UserJwtRefreshTokenStrategy } from './strategies/user_jwt_refresh_token.strategy';
+import { UserAuthService } from './user_auth.service';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UserJwtRefreshTokenStrategy } from './strategies/user_jwt_refresh_token
     AdminJwtRefreshTokenStrategy,
     UserJwtStrategy,
     UserJwtRefreshTokenStrategy,
+    UserAuthService,
   ],
   controllers: [AuthController],
   exports: [MyJwtService],

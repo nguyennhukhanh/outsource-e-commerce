@@ -8,8 +8,11 @@ import { JwtPayloadType } from 'src/shared/types';
 import { AuthFactory } from './auth.factory';
 import { AuthHelperService } from './auth_helper.service';
 import { ValidateByGoogleDto } from './dto/admin_social.validate';
+import { UserCreateDto } from './dto/user.create';
+import { UserValidateDto } from './dto/user.validate';
 import { AdminJwtRefreshTokenGuard } from './guards/admin_jwt_refresh_token.guard';
 import { UserJwtRefreshTokenGuard } from './guards/user_jwt_refresh_token.guard';
+import { UserAuthService } from './user_auth.service';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -17,6 +20,7 @@ export class AuthController {
   constructor(
     private readonly authFactory: AuthFactory,
     private readonly authHelperService: AuthHelperService,
+    private readonly userAuthService: UserAuthService,
   ) {}
 
   /**
@@ -53,6 +57,18 @@ export class AuthController {
   /**
    * User Routes
    */
+  @ApiOperation({ summary: SwaggerOperationEnum.USER })
+  @Post('user/register')
+  async registerUser(@Body() dto: UserCreateDto) {
+    return await this.userAuthService.register(dto);
+  }
+
+  @ApiOperation({ summary: SwaggerOperationEnum.USER })
+  @Post('user/login')
+  async loginUser(@Body() dto: UserValidateDto) {
+    return await this.userAuthService.login(dto);
+  }
+
   @ApiOperation({ summary: SwaggerOperationEnum.USER })
   @Post('user/login/google')
   async loginAsUserWithGoogle(@Body() dto: ValidateByGoogleDto) {
