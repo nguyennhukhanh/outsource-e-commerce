@@ -11,6 +11,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { RoleGuard } from './modules/auth/guards/role.guard';
 import { CartModule } from './modules/cart/cart.module';
 import { CategoryModule } from './modules/category/category.module';
+import { CheckoutModule } from './modules/checkout/checkout.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DebugModule } from './modules/debug/debug.module';
 import { HealthController } from './modules/default/health.controller';
@@ -36,6 +37,7 @@ import { OrmModule } from './orm.module';
     ProductModule,
     CartModule,
     CommentModule,
+    CheckoutModule,
   ],
   controllers: [HealthController],
   providers: [

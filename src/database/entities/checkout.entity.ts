@@ -23,6 +23,9 @@ export class Checkout extends BaseTime {
   @Column({ length: 20 })
   status: string; // 'pending' | 'processing' | 'completed' | 'cancelled'
 
+  @Column({ length: 20 })
+  methodPayment: string; // 'cash' | 'credit_card' | 'debit_card'
+
   @ManyToOne(() => User, (user) => user.checkouts)
   user: User;
 
