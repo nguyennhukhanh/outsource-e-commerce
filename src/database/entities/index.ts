@@ -5,6 +5,8 @@ export * from './cart-item.entity';
 export * from './category.entity';
 export * from './checkout.entity';
 export * from './checkout-item.entity';
+export * from './comment.entity';
+export * from './post.entity';
 export * from './product.entity';
 export * from './product-category.entity';
 export * from './product-comment.entity';

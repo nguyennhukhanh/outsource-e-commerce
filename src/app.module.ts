@@ -15,6 +15,8 @@ import { CheckoutModule } from './modules/checkout/checkout.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DebugModule } from './modules/debug/debug.module';
 import { HealthController } from './modules/default/health.controller';
+import { PostModule } from './modules/post/post.module';
+import { PostCommentModule } from './modules/post-comment/post-comment.module';
 import { ProductModule } from './modules/product/product.module';
 import { SessionModule } from './modules/session/session.module';
 import { OrmModule } from './orm.module';
@@ -38,6 +40,8 @@ import { OrmModule } from './orm.module';
     CartModule,
     CommentModule,
     CheckoutModule,
+    PostModule,
+    PostCommentModule,
   ],
   controllers: [HealthController],
   providers: [
