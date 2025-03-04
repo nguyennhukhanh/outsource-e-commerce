@@ -56,10 +56,10 @@ async function bootstrap() {
       : '*',
     credentials: true,
     maxAge: 86400,
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Origin', 'Accept'],
     exposedHeaders: ['Content-Disposition'],
     optionsSuccessStatus: 200,
-    preflightContinue: true,
+    preflightContinue: false, // Changed from true to false to properly handle preflight
     methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   };
 
