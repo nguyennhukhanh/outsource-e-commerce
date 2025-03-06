@@ -14,10 +14,13 @@ import { CategoryModule } from './modules/category/category.module';
 import { CheckoutModule } from './modules/checkout/checkout.module';
 import { CommentModule } from './modules/comment/comment.module';
 import { DebugModule } from './modules/debug/debug.module';
-import { HealthController } from './modules/default/health.controller';
+// Import renamed to avoid confusion
+import { HealthController as DefaultHealthController } from './modules/default/health.controller';
+import { HealthModule } from './modules/health/health.module';
 import { PostModule } from './modules/post/post.module';
 import { PostCommentModule } from './modules/post-comment/post-comment.module';
 import { ProductModule } from './modules/product/product.module';
+import { ServicesModule } from './modules/services/services.module';
 import { SessionModule } from './modules/session/session.module';
 import { OrmModule } from './orm.module';
 
@@ -42,8 +45,10 @@ import { OrmModule } from './orm.module';
     CheckoutModule,
     PostModule,
     PostCommentModule,
+    ServicesModule,
+    HealthModule,
   ],
-  controllers: [HealthController],
+  controllers: [DefaultHealthController],
   providers: [
     {
       provide: APP_FILTER,

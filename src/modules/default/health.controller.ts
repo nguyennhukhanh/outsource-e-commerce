@@ -6,11 +6,6 @@ const logger = getLogger('HealthController');
 
 @Controller()
 export class HealthController {
-  @Get('health')
-  async base(): Promise<string> {
-    return 'The application is up and running!';
-  }
-
   @Get('user-agent')
   async userAgent(
     @Req() req: Request,

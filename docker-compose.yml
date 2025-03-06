@@ -14,8 +14,10 @@ services:
     ports:
       - ${PORT}:${PORT}
     depends_on:
-      - redis
-      - mysql_db
+      redis:
+        condition: service_healthy
+      mysql_db:
+        condition: service_started
     networks:
       - app-network
     environment:
@@ -25,7 +27,19 @@ services:
     image: redis:latest
     hostname: e-commerce-redis
     container_name: e-commerce-redis
-    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}", "--protected-mode", "no"]
+    restart: always
+    command:
+      [
+        'redis-server',
+        '--requirepass',
+        '${REDIS_PASSWORD}',
+        '--protected-mode',
+        'no',
+        '--maxmemory',
+        '256mb',
+        '--maxmemory-policy',
+        'allkeys-lru',
+      ]
     environment:
       - REDIS_PORT=${REDIS_PORT}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
@@ -35,7 +49,7 @@ services:
     volumes:
       - redis-data:/data
     healthcheck:
-      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD}', 'ping']
       interval: 5s
       timeout: 5s
       retries: 5
