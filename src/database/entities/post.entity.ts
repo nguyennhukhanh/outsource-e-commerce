@@ -20,6 +20,9 @@ export class Post extends BaseTime {
   @Column({ type: 'text', nullable: false })
   content: string;
 
+  @Column({ type: 'simple-array', nullable: true })
+  images: string[];
+
   @Column({ type: 'int', default: 0 })
   likes: number;
 

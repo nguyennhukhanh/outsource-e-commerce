@@ -11,4 +11,13 @@ export class UpdatePostDto {
   @IsOptional()
   @IsString()
   content?: string;
+
+  @ApiProperty({
+    type: 'array',
+    items: { type: 'string', format: 'binary' },
+    required: false,
+    description: 'Optional post images',
+  })
+  @IsOptional()
+  images?: Express.Multer.File[];
 }
