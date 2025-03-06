@@ -22,6 +22,8 @@ services:
       - app-network
     environment:
       - REDIS_HOST=e-commerce-redis
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
 
   redis:
     image: redis:latest
