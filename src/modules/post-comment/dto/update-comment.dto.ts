@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateCommentDto {
+export class UpdatePostCommentDto {
   @ApiProperty({ description: 'Updated comment content' })
   @IsNotEmpty()
   @IsString()

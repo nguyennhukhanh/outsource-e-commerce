@@ -11,9 +11,9 @@ import type { FetchResult } from 'src/utils/paginate';
 import { FetchType, paginateEntities } from 'src/utils/paginate';
 import { Repository } from 'typeorm';
 
-import type { CommentQueryDto } from './dto/comment.query.dto';
-import type { CreateCommentDto } from './dto/create-comment.dto';
-import type { UpdateCommentDto } from './dto/update-comment.dto';
+import type { CommentProductQueryDto } from './dto/comment.query.dto';
+import type { CreateProductCommentDto } from './dto/create-comment.dto';
+import type { UpdateProductCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class CommentService {
@@ -25,7 +25,7 @@ export class CommentService {
   ) {}
 
   async getComments(
-    query?: CommentQueryDto,
+    query?: CommentProductQueryDto,
     pagination?: QueryPaginationDto,
   ): Promise<FetchResult<ProductComment>> {
     const { productId, userId, search, fromDate, toDate, sort } = query || {};
@@ -85,7 +85,7 @@ export class CommentService {
 
   async createComment(
     user: User,
-    createDto: CreateCommentDto,
+    createDto: CreateProductCommentDto,
   ): Promise<ProductComment> {
     // Check if product exists
     const product = await this.productRepository.findOne({
@@ -109,7 +109,7 @@ export class CommentService {
   async updateComment(
     user: User,
     commentId: number,
-    updateDto: UpdateCommentDto,
+    updateDto: UpdateProductCommentDto,
   ): Promise<ProductComment> {
     const comment = await this.getCommentById(commentId);
 

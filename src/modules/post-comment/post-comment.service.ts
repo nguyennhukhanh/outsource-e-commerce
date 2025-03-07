@@ -4,8 +4,8 @@ import type { User } from 'src/database/entities';
 import { Comment, Post } from 'src/database/entities';
 import { Repository } from 'typeorm';
 
-import type { CreateCommentDto } from './dto/create-comment.dto';
-import type { UpdateCommentDto } from './dto/update-comment.dto';
+import type { CreatePostCommentDto } from './dto/create-comment.dto';
+import type { UpdatePostCommentDto } from './dto/update-comment.dto';
 
 @Injectable()
 export class PostCommentService {
@@ -48,7 +48,7 @@ export class PostCommentService {
 
   async create(
     user: User,
-    createCommentDto: CreateCommentDto,
+    createCommentDto: CreatePostCommentDto,
   ): Promise<Comment> {
     const post = await this.postRepository.findOne({
       where: { id: createCommentDto.postId },
@@ -86,7 +86,7 @@ export class PostCommentService {
   async update(
     id: number,
     userId: number,
-    updateCommentDto: UpdateCommentDto,
+    updateCommentDto: UpdatePostCommentDto,
   ): Promise<Comment> {
     const comment = await this.commentRepository.findOne({
       where: { id, user: { id: userId } },

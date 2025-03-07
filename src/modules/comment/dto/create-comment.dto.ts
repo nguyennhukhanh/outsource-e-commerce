@@ -9,7 +9,7 @@ import {
   Min,
 } from 'class-validator';
 
-export class CreateCommentDto {
+export class CreateProductCommentDto {
   @ApiProperty({ description: 'Comment content', example: 'Great product!' })
   @IsString()
   @IsNotEmpty()

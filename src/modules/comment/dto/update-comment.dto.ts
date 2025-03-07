@@ -2,7 +2,7 @@ import { ApiPropertyOptional } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 
-export class UpdateCommentDto {
+export class UpdateProductCommentDto {
   @ApiPropertyOptional({
     description: 'Comment content',
     example: 'Updated review',

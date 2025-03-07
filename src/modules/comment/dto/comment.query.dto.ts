@@ -3,7 +3,7 @@ import { Transform } from 'class-transformer';
 import { IsInt, IsOptional } from 'class-validator';
 import { CommonQuery } from 'src/shared/dto/common.query';
 
-export class CommentQueryDto extends CommonQuery {
+export class CommentProductQueryDto extends CommonQuery {
   @ApiPropertyOptional({
     description: 'Product ID to filter comments',
     example: 1,

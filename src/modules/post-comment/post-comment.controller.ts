@@ -14,8 +14,8 @@ import { GetUser } from 'src/common/decorators/user.decorator';
 import { User } from 'src/database/entities';
 
 import { UserJwtGuard } from '../auth/guards/user_jwt.guard';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CreatePostCommentDto } from './dto/create-comment.dto';
+import { UpdatePostCommentDto } from './dto/update-comment.dto';
 import { PostCommentService } from './post-comment.service';
 
 @ApiTags('post-comment')
@@ -45,7 +45,10 @@ export class PostCommentController {
   @Post()
   @UseGuards(UserJwtGuard)
   @ApiBearerAuth()
-  create(@GetUser() user: User, @Body() createCommentDto: CreateCommentDto) {
+  create(
+    @GetUser() user: User,
+    @Body() createCommentDto: CreatePostCommentDto,
+  ) {
     return this.commentService.create(user, createCommentDto);
   }
 
@@ -56,7 +59,7 @@ export class PostCommentController {
   update(
     @Param('id', ParseIntPipe) id: number,
     @GetUser() user: User,
-    @Body() updateCommentDto: UpdateCommentDto,
+    @Body() updateCommentDto: UpdatePostCommentDto,
   ) {
     return this.commentService.update(id, user.id, updateCommentDto);
   }

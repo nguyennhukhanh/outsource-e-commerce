@@ -17,9 +17,9 @@ import { QueryPaginationDto } from 'src/shared/dto/pagination.query';
 
 import { UserJwtGuard } from '../auth/guards/user_jwt.guard';
 import { CommentService } from './comment.service';
-import { CommentQueryDto } from './dto/comment.query.dto';
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { UpdateCommentDto } from './dto/update-comment.dto';
+import { CommentProductQueryDto } from './dto/comment.query.dto';
+import { CreateProductCommentDto } from './dto/create-comment.dto';
+import { UpdateProductCommentDto } from './dto/update-comment.dto';
 
 @ApiTags('product-comment')
 @Controller('product-comment')
@@ -29,7 +29,7 @@ export class CommentController {
   @ApiOperation({ summary: 'Get all comments' })
   @Get()
   findAll(
-    @Query() query?: CommentQueryDto,
+    @Query() query?: CommentProductQueryDto,
     @Query() pagination?: QueryPaginationDto,
   ) {
     return this.commentService.getComments(query, pagination);
@@ -45,7 +45,10 @@ export class CommentController {
   @ApiBearerAuth()
   @UseGuards(UserJwtGuard)
   @Post()
-  create(@GetUser() user: User, @Body() createCommentDto: CreateCommentDto) {
+  create(
+    @GetUser() user: User,
+    @Body() createCommentDto: CreateProductCommentDto,
+  ) {
     return this.commentService.createComment(user, createCommentDto);
   }
 
@@ -56,7 +59,7 @@ export class CommentController {
   update(
     @GetUser() user: User,
     @Param('id', ParseIntPipe) id: number,
-    @Body() updateCommentDto: UpdateCommentDto,
+    @Body() updateCommentDto: UpdateProductCommentDto,
   ) {
     return this.commentService.updateComment(user, id, updateCommentDto);
   }
