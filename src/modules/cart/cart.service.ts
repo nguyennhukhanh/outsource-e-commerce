@@ -15,7 +15,7 @@ export class CartService {
     private readonly cartItemRepository: Repository<CartItem>,
   ) {}
 
-  async getCart(user: User): Promise<Cart> {
+  async getCart(user: User): Promise<any> {
     const cart = await this.cartRepository.findOne({
       where: { user: { id: user.id } },
       relations: ['cartItems', 'cartItems.product'],
@@ -30,7 +30,21 @@ export class CartService {
       );
     }
 
-    return cart;
+    // Calculate total amount
+    const totalAmount = cart.cartItems.reduce(
+      (sum, item) => sum + item.product.price * item.quantity,
+      0,
+    );
+
+    // Add calculated total to the response without modifying the entity
+    return {
+      ...cart,
+      totalAmount,
+      cartItems: cart.cartItems.map((item) => ({
+        ...item,
+        itemTotal: item.product.price * item.quantity,
+      })),
+    };
   }
 
   async addToCart(user: User, dto: AddToCartDto): Promise<Cart> {
